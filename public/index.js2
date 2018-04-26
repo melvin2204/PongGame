@@ -1,0 +1,144 @@
+var fps = 60;
+var player1;
+var player2;
+var playerSpeed = 10;
+var keys = [];
+var ball;
+var ballSpeed = 5;
+
+var Canvas = {
+	canvas: document.createElement("canvas"),
+	start: function() {
+		this.canvas.width = 700;
+		this.canvas.height = 600;
+		this.canvas.id = "canvas";
+		this.context = this.canvas.getContext("2d");
+		document.body.insertBefore(this.canvas,document.body.childNodes[0]);
+		this.frameNo = 0;
+	},
+	clear : function() {
+		this.context.clearRect(0,0,this.canvas.width, this.canvas.height);
+	}
+}
+
+function game() {
+	player2.x = ball.x - player2.width / 2 + 50;
+	player1.x = ball.x - player1.width / 2 + 50;
+	/*player2.x = player1.x;*/
+	update();
+	render();
+}
+
+function start(){
+	Canvas.start();
+	refresh = setInterval(function(){
+		game();
+	}, 1000/fps);
+	player1 = new player(100,10,"white",700/2 - 50,600 - 10,true);
+	player2 = new player(100,10,"white",700/2 - 50,25 - 10,false);
+	ball = new ball(10,10,"white",700/2 - 10,600/2 - 10);
+}
+
+function player(width,height,color,x,y,playable) {
+	this.width = width;
+	this.height = height;
+	this.color = color;
+	this.x = x;
+	this.y = y;
+	this.playable = playable;
+	ctx = Canvas.context;
+	this.update = function(i){
+		if (this.playable) {
+			/*if (keys[38]) this.y -= playerSpeed;
+			if (keys[40]) this.y += playerSpeed;*/
+			if (keys[37]) this.x -= playerSpeed;
+			if (keys[39]) this.x += playerSpeed;
+
+			if(this.x < 0) this.x = 0;
+			/*if (this.y < 0) this.y = 0;*/
+			if (this.x + this.width >= Canvas.canvas.width) this.x = Canvas.canvas.width - this.width;
+			/*if (this.y + this.height >= Canvas.canvas.height) this.y = Canvas.canvas.height - this.height;*/
+		}
+	}
+	this.render = function(){
+		ctx.fillStyle = this.color;
+		ctx.fillRect(this.x,this.y,this.width,this.height);
+	}
+}
+function ball(width,height,color,x,y){
+	this.width = width;
+	this.height = height;
+	this.color = color;
+	this.x = x;
+	this.y = y;
+	this.xSpeed = 0;
+	this.ySpeed = 3;
+	ctx = Canvas.context;
+	this.update = function() {
+		this.x += this.xSpeed;
+		this.y += this.ySpeed;
+		if(this.x < 0) {//linker muur
+			this.x = 0;
+			this.xSpeed = -this.xSpeed;
+		}
+		if (this.y < 0) {//speler2 verloren
+			this.y = 0;
+			window.location.reload();
+		}
+		if (this.x + this.width >= Canvas.canvas.width) {//rechter muur
+			this.x = Canvas.canvas.width - this.width;
+			this.xSpeed = -this.xSpeed;
+		}
+		if (this.y + this.height >= Canvas.canvas.height) {//speler1 verloren
+			this.y = Canvas.canvas.height - this.height;
+			window.location.reload();
+		}
+		var paddle = this.ySpeed > 0 ? player1 : player2;
+		if (AABBIntersect(this.x,this.y,this.width,this.height, paddle.x, paddle.y, paddle.width, paddle.height)) {//botsing met player 1
+			let n = (this.x + this.height - paddle.x)/(paddle.width + this.height);
+			let phi = 0.25 * Math.PI * (2*n - 1);
+			this.xSpeed = Math.sin(phi) * random(5,10);
+			this.ySpeed = -this.ySpeed * ((ballSpeed / 100) + 1);
+			console.log(this.xSpeed,this.ySpeed);
+		}
+	}
+	this.render = function() {
+		ctx.fillStyle = this.color;
+		ctx.fillRect(this.x,this.y,this.width,this.height);
+	}
+}
+
+function AABBIntersect(ax,ay,aw,ah,bx,by,bw,bh) {
+	return (
+		ax < bx + bw &&
+		ax + aw > bx &&
+		ay < by + bh &&
+		ay + ah > by
+		);
+}
+function update(){
+	player2.update();
+	player1.update();
+	ball.update();
+}
+
+function render(){
+	Canvas.clear();//clear canvas
+	player1.render();//render player1
+	player2.render();//render player2
+	ball.render();
+}
+
+window.addEventListener("keydown", function(e){
+    keys[e.keyCode] = true;
+    if (e.keyCode == 80 || e.keyCode == 19 || e.keyCode == 27) pause(); //esc Pause/Break p -> pause();
+}, false);
+window.addEventListener("keyup", function(e){
+    delete keys[e.keyCode];
+}, false);
+
+function random(min, max) {
+    return Math.random() * (max - min) + min;
+}
+
+document.onload = start();
