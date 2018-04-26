@@ -237,8 +237,8 @@ function update(){
 
 function render(){
 	Canvas.clear();//clear canvas
-	new createText(10,600/2 - 15,p2Score,"white","25px sans-serif",0);//show scores
-	new createText(10,600/2 + 15,p1Score,"white","25px sans-serif",0);//show scores
+	new createText(20,600/2 - 15,p2Score,"white","25px sans-serif",0);//show scores
+	new createText(20,600/2 + 15,p1Score,"white","25px sans-serif",0);//show scores
 	player1.render();//render player1
 	player2.render();//render player2
 	ball.render();
