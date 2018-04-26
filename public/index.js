@@ -151,8 +151,8 @@ function ball(width,height,color,x,y){
 		}
 		if (this.y < 0) {//speler2 verloren
 			if (!isHost) win(1);
-			ball.xSpeed = 0;
-			ball.ySpeed = 0;
+			/*ball.xSpeed = 0;
+			ball.ySpeed = 0;*/
 			//win(1);
 		}
 		if (this.x + this.width >= Canvas.canvas.width) {//rechter muur
@@ -163,8 +163,8 @@ function ball(width,height,color,x,y){
 			this.y = Canvas.canvas.height - this.height;
 			//window.location.reload();
 			if (isHost) win(2);
-			ball.xSpeed = 0;
-			ball.ySpeed = 0;
+			/*ball.xSpeed = 0;
+			ball.ySpeed = 0;*/
 			//win(2)
 		}
 		var paddle = this.ySpeed > 0 ? player1 : player2;
@@ -330,6 +330,7 @@ socket.on("sync",function(data){
 			player2.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			p2Score++;
 			updateObjects.push(new createText(700/2,600/2,"Player 2 scored","white","50px sans-serif",1));
+			newBallReceived = true;
 		}
 		if (data.winner === 1) {
 			ball.x = 700/2 - 10;
@@ -340,6 +341,7 @@ socket.on("sync",function(data){
 			player2.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			p1Score++;
 			updateObjects.push(new createText(700/2,600/2,"Player 1 scored","white","50px sans-serif",1));
+			newBallReceived = true;
 		}
 		return;
 	}
