@@ -40,7 +40,7 @@ label {
 input {
 	width: 150px;
 }
-button {
+button:not(#calibrate) {
 	width: 50px;
 }
 @media (orientation:portrait ) {
