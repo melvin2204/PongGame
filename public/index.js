@@ -173,7 +173,7 @@ function ball(width,height,color,x,y){
 			let phi = 0.25 * Math.PI * (2*n - 1);
 			this.xSpeed = Math.sin(phi) * randomInt;
 			if (Math.abs(this.ySpeed) < 10) {
-				this.ySpeed = -this.ySpeed * ballSpeed;
+				this.ySpeed = (-this.ySpeed) * ballSpeed;
 			}else{
 				this.ySpeed = -this.ySpeed;
 			}
