@@ -63,10 +63,11 @@ function game() {
 
 function start(){
 	calibrate();
-	document.getElementById("body").innerHTML = "";
-	ping = document.createElement("span");
+	//document.getElementById("body").innerHTML = "";//empty the body
+	document.getElementById("loginScreen").remove();
+	/*ping = document.createElement("span");
 	ping.setAttribute("id", "ping");
-	document.body.appendChild(ping);
+	document.body.appendChild(ping);*/
 	Canvas.start();
 	refresh = setInterval(function(){
 		game();
@@ -367,10 +368,10 @@ socket.on("sync",function(data){
 });
 socket.on("makeRoom",function(data){
 	if (data.done) {
-		console.log("Made room");
+		console.log("Made room." ,data.room);
 		room = data.room;
 		document.getElementById("makeH").remove();
-		document.getElementById("body").innerHTML += "<p>Waiting for someone to join room '" + room + "'.<br>The game immediately starts when someone joins your room!</p>";
+		document.getElementById("loginScreen").innerHTML += "<p>Waiting for someone to join room '" + room + "'.<br>The game immediately starts when someone joins your room!</p>";
 	}else{
 		alert("This room is already in use.");
 	}
