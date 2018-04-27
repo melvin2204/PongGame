@@ -2,7 +2,57 @@ html,body {
 	border: none;
 	padding: 0;
 	margin: 0;
+	font-family: sans-serif;
+	background-color: gray;
+	color: white;
 }
 canvas {
 	background-color: black;
 }
+#title {
+	text-align: center;
+}
+#actualLogin {
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+}
+#loginScreen {
+	min-height: 200px;
+	position: relative;
+}
+#loginScreen * {
+	display: inline-block;
+}
+#loginScreen p {
+	text-align: center;
+}
+#shortGuide {
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	transform: translateX(-50%);
+	display: inline-block;
+}
+label {
+	width: 100px;
+}
+input {
+	width: 150px;
+}
+button {
+	width: 50px;
+}
+@media (orientation:portrait ) {
+	canvas {
+		width: 100%;
+	}
+}
+@media (orientation:landscape ) {
+	canvas {
+		height: 100vh;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+} 

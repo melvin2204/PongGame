@@ -2,14 +2,28 @@
 <html>
 <head>
 	<title>Pong</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.0/socket.io.js"></script>
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	<script src="nosleep.js"></script>
 </head>
 <body id="body">
-<script type="text/javascript" src="index.js"></script>
-<label for="join">Join a room:</label><input type="text" id="join" autocapitalize="none"><button onclick="uiConnectRoom();">Join</button><br>
-<div id="makeH"><label for="make">Make a room:</label><input type="text" id="make" autocapitalize="none"><button onclick="uiMakeRoom();">Make</button></div>
-<p>Use the left and right arrow key to move. You are always the white platform.</p>
+	<h1 id="title">Pong</h1>
+	<div id="loginScreen">
+		<div id="actualLogin">
+			<label for="join">Join a room:</label>
+			<input type="text" id="join" autocapitalize="none" minlength="2" maxlength="6">
+			<button onclick="uiConnectRoom();">Join</button>
+			<br>
+			<div id=	"makeH">
+				<label for="make">Make a room:</label>
+				<input type="text" id="make" autocapitalize="none" minlength="2" maxlength="6">
+				<button onclick="uiMakeRoom();">Make</button>
+			</div>
+		</div>
+		<p id="shortGuide">Use the left and right arrow key to move. You are always the white platform.</p>
+	</div>
+	<span id="ping"></span>
+	<script type="text/javascript" src="index.js"></script>
 </body>
 </html>

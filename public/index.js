@@ -28,8 +28,8 @@ var noSleep = new NoSleep();
 var Canvas = {
 	canvas: document.createElement("canvas"),
 	start: function() {
-		this.canvas.width = 700;
-		this.canvas.height = 600;
+		this.canvas.width = 900;
+		this.canvas.height = 700;
 		this.canvas.id = "canvas";
 		this.context = this.canvas.getContext("2d");
 		document.body.insertBefore(this.canvas,document.body.childNodes[0]);
@@ -46,7 +46,7 @@ function game() {
 		sync();
 	}
 	if (frame == 0) {
-		if (pings < 4) {
+		if (pings < 2) {
 			pings++;
 		}else{
 			pingTest();
@@ -63,22 +63,20 @@ function game() {
 
 function start(){
 	calibrate();
-	document.getElementById("body").innerHTML = "";
-	ping = document.createElement("span");
-	ping.setAttribute("id", "ping");
-	document.body.appendChild(ping);
+	document.getElementById("loginScreen").remove();
+	document.getElementById("title").remove();
 	Canvas.start();
 	refresh = setInterval(function(){
 		game();
 	}, 1000/fps);
 	if (isHost) {
-		player1 = new player(playerWidth,playerHeight,"white",(Canvas.canvas.width / 2) - (playerWidth / 2),600 - 20,true);
+		player1 = new player(playerWidth,playerHeight,"white",(Canvas.canvas.width / 2) - (playerWidth / 2),Canvas.canvas.height - 20,true);
 		player2 = new player(playerWidth,playerHeight,"grey",(Canvas.canvas.width / 2) - (playerWidth / 2),10,false);
 	}else{
-		player1 = new player(playerWidth,playerHeight,"grey",(Canvas.canvas.width / 2) - (playerWidth / 2),600 - 20,false);
+		player1 = new player(playerWidth,playerHeight,"grey",(Canvas.canvas.width / 2) - (playerWidth / 2),Canvas.canvas.height - 20,false);
 		player2 = new player(playerWidth,playerHeight,"white",(Canvas.canvas.width / 2) - (playerWidth / 2),10,true);
 	}
-	ball = new ball(10,10,"white",700/2 - 10,600/2 - 10);
+	ball = new ball(10,10,"white",(Canvas.canvas.width / 2) - (10 / 2),(Canvas.canvas.width / 2) - (10 /2));
 }
 
 function pause(other) {
@@ -95,7 +93,7 @@ function pause(other) {
 		}
 		paused = false;
 	}else{
-		new createText(700/2,600/2,"Pause","white","50px sans-serif",0);
+		new createText(Canvas.canvas.width/2,Canvas.canvas.height/2,"Pause","white","50px sans-serif",0);
 		clearInterval(refresh);
 		if (!(typeof other !== 'undefined')) {
 		socket.emit("pauseGame", {
@@ -237,8 +235,8 @@ function update(){
 
 function render(){
 	Canvas.clear();//clear canvas
-	new createText(10,600/2 - 15,p2Score,"white","25px sans-serif",0);//show scores
-	new createText(10,600/2 + 15,p1Score,"white","25px sans-serif",0);//show scores
+	new createText(20,Canvas.canvas.height/2 - 15,p2Score,"white","25px sans-serif",0);//show scores
+	new createText(20,Canvas.canvas.height/2 + 15,p1Score,"white","25px sans-serif",0);//show scores
 	player1.render();//render player1
 	player2.render();//render player2
 	ball.render();
@@ -322,25 +320,25 @@ socket.on("roomJoin",function(data){
 socket.on("sync",function(data){
 	if (typeof data.winSync !== 'undefined') {
 		if (data.winner === 2) {
-			ball.x = 700/2 - 10;
-			ball.y = 600/2 - 10;
+			ball.x = Canvas.canvas.width/2 - 10;
+			ball.y = Canvas.canvas.height/2 - 10;
 			ball.xSpeed = 0;
 			ball.ySpeed = -1.5;
 			player1.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			player2.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			p2Score++;
-			updateObjects.push(new createText(700/2,600/2,"Player 2 scored","white","50px sans-serif",1));
+			updateObjects.push(new createText(Canvas.canvas.width/2,Canvas.canvas.height/2,"Player 2 scored","white","50px sans-serif",1));
 			newBallReceived = true;
 		}
 		if (data.winner === 1) {
-			ball.x = 700/2 - 10;
-			ball.y = 600/2 - 10;
+			ball.x = Canvas.canvas.width/2 - 10;
+			ball.y = Canvas.canvas.height/2 - 10;
 			ball.xSpeed = 0;
 			ball.ySpeed = 1.5;
 			player1.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			player2.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			p1Score++;
-			updateObjects.push(new createText(700/2,600/2,"Player 1 scored","white","50px sans-serif",1));
+			updateObjects.push(new createText(Canvas.canvas.width/2,Canvas.canvas.height/2,"Player 1 scored","white","50px sans-serif",1));
 			newBallReceived = true;
 		}
 		return;
@@ -367,18 +365,17 @@ socket.on("sync",function(data){
 });
 socket.on("makeRoom",function(data){
 	if (data.done) {
-		console.log("Made room");
+		console.log("Made room." ,data.room);
 		room = data.room;
-		document.getElementById("makeH").remove();
-		document.getElementById("body").innerHTML += "<p>Waiting for someone to join room '" + room + "'.<br>The game immediately starts when someone joins your room!</p>";
+		document.getElementById("actualLogin").innerHTML = "<p>Waiting for someone to join room '" + room + "'.<br>The game immediately starts when someone joins your room!</p>";
 	}else{
 		alert("This room is already in use.");
 	}
 });
 socket.on("reset",function(data){
 	ball.ySpeed = data.ballYSpeed;
-	ball.x = 700/2 - 10;
-	ball.y = 600/2 - 10;
+	ball.x = Canvas.canvas.width/2 - 10;
+	ball.y = Canvas.canvas.height/2 - 10;
 	ball.xSpeed = 0;
 	player1.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 	player2.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
@@ -392,15 +389,15 @@ function win(who){
 	**/
 	switch (who) {
 		case 0:
-			ball.x = 700/2 - 10;
-			ball.y = 600/2 - 10;
+			ball.x = Canvas.canvas.width/2 - 10;
+			ball.y = Canvas.canvas.height/2 - 10;
 			ball.xSpeed = 0;
 			ball.ySpeed = 1.5;
 			if (random(0,1) > 0.5) ball.ySpeed = 1.5;
 			player1.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			player2.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			newBallReceived = true;
-			updateObjects.push(new createText(700/2,600/2,"Reset ball","white","50px sans-serif",1));
+			updateObjects.push(new createText(Canvas.canvas.width/2,Canvas.canvas.height/2,"Reset ball","white","50px sans-serif",1));
 			socket.emit("reset",{
 				receiver: otherID,
 				ballYSpeed: ball.ySpeed,
@@ -412,14 +409,14 @@ function win(who){
 				winSync: true,
 				winner: 1,
 			});
-			ball.x = 700/2 - 10;
-			ball.y = 600/2 - 10;
+			ball.x = Canvas.canvas.width/2 - 10;
+			ball.y = Canvas.canvas.height/2 - 10;
 			ball.xSpeed = 0;
 			ball.ySpeed = 1.5;
 			player1.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			player2.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			p1Score++;
-			updateObjects.push(new createText(700/2,600/2,"Player 1 scored","white","50px sans-serif",1));
+			updateObjects.push(new createText(Canvas.canvas.width/2,Canvas.canvas.height/2,"Player 1 scored","white","50px sans-serif",1));
 			break;
 		case 2:
 			socket.emit("sync", {
@@ -427,14 +424,14 @@ function win(who){
 				winSync: true,
 				winner: 2,
 			});
-			ball.x = 700/2 - 10;
-			ball.y = 600/2 - 10;
+			ball.x = Canvas.canvas.width/2 - 10;
+			ball.y = Canvas.canvas.height/2 - 10;
 			ball.xSpeed = 0;
 			ball.ySpeed = -1.5;
 			player1.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			player2.x = (Canvas.canvas.width / 2) - (playerWidth / 2);
 			p2Score++;
-			updateObjects.push(new createText(700/2,600/2,"Player 2 scored","white","50px sans-serif",1));
+			updateObjects.push(new createText(Canvas.canvas.width/2,Canvas.canvas.height/2,"Player 2 scored","white","50px sans-serif",1));
 			break;
 		default:
 			// statements_def
