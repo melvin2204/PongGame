@@ -51,8 +51,8 @@ button:not(#calibrate) {
 @media (orientation:landscape ) {
 	canvas {
 		position: absolute;
-    		top: 50%;
-    		transform: translateY(-50%);
-    		width: 100%;
+    		left: 50%;
+    		transform: translateX(-50%);
+    		height: 100%;
 	}
 } 
