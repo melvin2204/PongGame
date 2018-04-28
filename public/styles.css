@@ -50,3 +50,6 @@ label {
 input {
 	width: 150px;
 }
+button:not(#calibrate) {
+	width: 50px;
+}
