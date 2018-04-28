@@ -8,6 +8,16 @@ html,body {
 }
 canvas {
 	background-color: black;
+	width: 100vw;
+    	height: 77.77777777777778vw;
+    	max-height: 100vh;
+    	max-width: 128.57142857142858vh;
+    	margin: auto;
+    	position: absolute;
+    	top: 0;
+    	bottom: 0;
+    	left: 0;
+    	right: 0;
 }
 #title {
 	text-align: center;
@@ -40,19 +50,3 @@ label {
 input {
 	width: 150px;
 }
-button:not(#calibrate) {
-	width: 50px;
-}
-@media (orientation:portrait ) {
-	canvas {
-		width: 100%;
-	}
-}
-@media (orientation:landscape ) {
-	canvas {
-		position: absolute;
-    		left: 50%;
-    		transform: translateX(-50%);
-    		height: 100%;
-	}
-} 
